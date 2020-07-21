@@ -129,16 +129,10 @@ class Watcher:
 
     def poll_for_changes(self, wait_time=1):
         while True:
-            try:
-                self.pinger.ping()
-                self._check_dir_for_changes(self.base_path)
-                self._first_pass = False
-            except requests.exceptions.ConnectionError:
-                print(f"Failed\nCould not reach {SERVER_URL}")
-            except Exception:
-                print("Unknown error")
-            else:
-                time.sleep(wait_time)  # Poll for changes every `wait_time` seconds
+            self.pinger.ping()
+            self._check_dir_for_changes(self.base_path)
+            self._first_pass = False
+            time.sleep(wait_time)  # Poll for changes every `wait_time` seconds
 
 
 def skiller_whale_sync():
