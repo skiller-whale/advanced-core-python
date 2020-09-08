@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import hashlib
+import threading
 import time
 from urllib.parse import urljoin
 
@@ -87,14 +88,26 @@ class Pinger:
     def ping(self):
         try:
             requests.post(self.uri)
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as err:
+            print("Connection error:", err)
             pass  # Tolerate failed pings
+
+    def start(self, wait_time=1):
+        while True:
+            try:
+                self.ping()
+            except Exception as err:
+                # This should not be reached except in exceptional circumstances
+                # We want to continue looping even if we hit an unexpected error
+                print("Unexpected error with ping:", err)
+
+            # Send a ping every `wait_time` seconds
+            time.sleep(wait_time)
 
 
 class Watcher:
-    def __init__(self, updater, pinger, base_path='.'):
+    def __init__(self, updater, base_path='.'):
         self.updater = updater
-        self.pinger = pinger
         self.base_path = base_path
         self._file_hashes = {}
         # Tracks whether this is the first pass of the directory tree. If not,
@@ -139,7 +152,6 @@ class Watcher:
     def poll_for_changes(self, wait_time=1):
         while True:
             try:
-                self.pinger.ping()
                 self._check_dir_for_changes(self.base_path)
             except Exception as err:
                 # This should not be reached except in exceptional circumstances
@@ -164,7 +176,10 @@ def skiller_whale_sync():
 
     updater = Updater(attendance_id=attendance_id)
     pinger = Pinger(attendance_id=attendance_id)
-    watcher = Watcher(updater=updater, pinger=pinger)
+    watcher = Watcher(updater=updater)
+
+    # Start ping service in a separate daemon thread
+    threading.Thread(target=pinger.start, daemon=True).start()
     watcher.poll_for_changes()
 
 
