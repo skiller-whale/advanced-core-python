@@ -6,8 +6,9 @@ import threading
 import time
 from urllib.parse import urljoin
 
-WATCHED_EXTS = [".py"]
-IGNORE_DIRS = [".git"]
+WATCHED_EXTS = [".py", ".ipynb"]
+# site-packages is found in a Python environment (which includes LOTS of .py files)
+IGNORE_DIRS = [".git", ".ipynb_checkpoints", "site-packages", "bin"]
 
 
 ASCII_ART = """
