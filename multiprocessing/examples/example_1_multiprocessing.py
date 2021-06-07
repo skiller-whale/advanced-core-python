@@ -28,31 +28,33 @@ def print_primes(range_start, range_end):
             print(number)
 
 
-# Split the range up evenly for different processes
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if __name__ == '__main__':
 
-print(f"Finding prime numbers between {RANGE_START} and {RANGE_END}.")
-print(f"Using {N_PROCESSES} processes, checking the sub-ranges:")
-for i, (start, end) in enumerate(split_range(RANGE_START, RANGE_END, N_PROCESSES)):
-    print(f"Process {i}: {start} - {end}")
+    # Split the range up evenly for different processes
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    print(f"Finding prime numbers between {RANGE_START} and {RANGE_END}.")
+    print(f"Using {N_PROCESSES} processes, checking the sub-ranges:")
+    for i, (start, end) in enumerate(split_range(RANGE_START, RANGE_END, N_PROCESSES)):
+        print(f"Process {i}: {start} - {end}")
 
 
-# Parallelize the calculation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Parallelize the calculation
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-print("\nFound Primes:")
-start_time = time.time()
+    print("\nFound Primes:")
+    start_time = time.time()
 
-# Create one process for each sub-range
-processes = [
-    multiprocessing.Process(target=print_primes, args=(start, end))
-    for start, end in split_range(RANGE_START, RANGE_END, N_PROCESSES)
-]
+    # Create one process for each sub-range
+    processes = [
+        multiprocessing.Process(target=print_primes, args=(start, end))
+        for start, end in split_range(RANGE_START, RANGE_END, N_PROCESSES)
+    ]
 
-for process in processes:
-    process.start()
+    for process in processes:
+        process.start()
 
-for process in processes:
-    process.join()
+    for process in processes:
+        process.join()
 
-print(f"Done. Calculation took {time.time() - start_time:.2f}s")
+    print(f"Done. Calculation took {time.time() - start_time:.2f}s")

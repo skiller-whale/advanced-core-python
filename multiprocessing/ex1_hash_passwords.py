@@ -23,7 +23,6 @@ import pathlib
 import time
 
 from utils import hash_password, PASSWORDS  # a dict of { username : password }
-start_time = time.time()  # Used to time the execution of this script
 
 
 def save_hashed_password(username, password, path):
@@ -33,16 +32,18 @@ def save_hashed_password(username, password, path):
         file.write(f'{username}, {salt}, {hashed_password}\n')
     print('.', end='', flush=True)
 
-# Define the hashed passwords file path, and create a blank file there
-target_path = pathlib.Path(__file__).parent / 'hashed_passwords.txt'
-with open(target_path, 'w'):
-    pass
 
+if __name__ == '__main__':
+    start_time = time.time()  # Used to time the execution of this script
 
-# TODO: Move each the call to save_hashed_password into its own process
-for username, password in PASSWORDS.items():
-    save_hashed_password(username, password, target_path)
+    # Define the hashed passwords file path, and create a blank file there
+    target_path = pathlib.Path(__file__).parent / 'hashed_passwords.txt'
+    with open(target_path, 'w'):
+        pass
 
+    # TODO: Move each the call to save_hashed_password into its own process
+    for username, password in PASSWORDS.items():
+        save_hashed_password(username, password, target_path)
 
-print(f'Done in {time.time() - start_time:.2f}.')
-print(f'Hashed passwords saved to: {target_path}')
+    print(f'Done in {time.time() - start_time:.2f}.')
+    print(f'Hashed passwords saved to: {target_path}')

@@ -23,33 +23,39 @@ primes_queue = multiprocessing.Queue()
 # Define a worker, which interacts with the Queues
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def worker():
+def worker(tasks_queue, results_queue):
     while True:
         try:
-            number = numbers_queue.get()
+            number = tasks_queue.get()
             if is_prime(number):
                 print(f"Found {number}")
-                primes_queue.put(number)
+                results_queue.put(number)
         finally:
-            numbers_queue.task_done()
+            tasks_queue.task_done()
 
 
-start_time = time.time()
+if __name__ == '__main__':
+    start_time = time.time()
 
-# Create several daemon worker processes
-for _ in range(N_PROCESSES):
-    multiprocessing.Process(target=worker, daemon=True).start()
+    # Create several daemon worker processes
+    for _ in range(N_PROCESSES):
+        multiprocessing.Process(
+            target=worker,
+            args=(numbers_queue, primes_queue),
+            daemon=True
+        ).start()
 
-# Add each number to test to the numbers queue
-for n in range(RANGE_START, RANGE_END):
-    numbers_queue.put(n)
-numbers_queue.join()  # Wait for all numbers to be processed
+    # Add each number to test to the numbers queue
+    for n in range(RANGE_START, RANGE_END):
+        numbers_queue.put(n)
+
+    numbers_queue.join()  # Wait for all numbers to be processed
 
 
-print(f"Done. Calculation took {time.time() - start_time:.2f}s")
-print("All primes found:")
+    print(f"Done. Calculation took {time.time() - start_time:.2f}s")
+    print("All primes found:")
 
-results = []
-while not primes_queue.empty():
-    results.append(primes_queue.get())
-print(results)
+    results = []
+    while not primes_queue.empty():
+        results.append(primes_queue.get())
+    print(results)

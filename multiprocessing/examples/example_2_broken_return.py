@@ -34,26 +34,26 @@ class PrimesInRange(multiprocessing.Process):
                 print(f"Found {number}")
                 self.primes.append(number)
 
+if __name__ == '__main__':
+    start_time = time.time()
 
-start_time = time.time()
+    # Create one process for each sub-range
+    processes = [
+        PrimesInRange(start, end)
+        for start, end in split_range(RANGE_START, RANGE_END, N_PROCESSES)
+    ]
 
-# Create one process for each sub-range
-processes = [
-    PrimesInRange(start, end)
-    for start, end in split_range(RANGE_START, RANGE_END, N_PROCESSES)
-]
+    for process in processes:
+        process.start()
 
-for process in processes:
-    process.start()
-
-for process in processes:
-    process.join()
+    for process in processes:
+        process.join()
 
 
-print(f"Done. Calculation took {time.time() - start_time:.2f}s")
-print("Primes found by each process:")
-for process in processes:
-    print(f"Range {process.range_start} - {process.range_end}:", end='\t')
-    # This fails, because the primes list has only been updated in the copied
-    # memory available to the subprocess
-    print(process.primes)
+    print(f"Done. Calculation took {time.time() - start_time:.2f}s")
+    print("Primes found by each process:")
+    for process in processes:
+        print(f"Range {process.range_start} - {process.range_end}:", end='\t')
+        # This fails, because the primes list has only been updated in the copied
+        # memory available to the subprocess
+        print(process.primes)

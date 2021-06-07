@@ -9,7 +9,6 @@ import pathlib
 import time
 
 from utils import hash_password, PASSWORDS  # a dict of { username : password }
-start_time = time.time()  # Used to time the execution of this script
 
 
 def write_to_file(path, username, salt, hashed_password):
@@ -18,10 +17,14 @@ def write_to_file(path, username, salt, hashed_password):
         file.write(f'{username}, {salt}, {hashed_password}\n')
     print('.', end='', flush=True)
 
-# Define the hashed passwords file path, and create a blank file there
-target_path = pathlib.Path(__file__).parent / 'hashed_passwords_2.txt'
-with open(target_path, 'w'):
-    pass
+
+if __name__ == "__main__":
+    start_time = time.time()  # Used to time the execution of this script
+
+    # Define the hashed passwords file path, and create a blank file there
+    target_path = pathlib.Path(__file__).parent / 'hashed_passwords_2.txt'
+    with open(target_path, 'w'):
+        pass
 
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<< INSTRUCTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
@@ -39,21 +42,21 @@ with open(target_path, 'w'):
 #   5. Uncomment the while loop to take results off the result queue and write
 #      them to file.
 
-job_queue = ...
-result_queue = ...
+    job_queue = ...
+    result_queue = ...
 
 
-for username, password in PASSWORDS.items():
-    hashed_password, salt = hash_password(password)
-    write_to_file(target_path, username, salt, hashed_password)
+    for username, password in PASSWORDS.items():
+        hashed_password, salt = hash_password(password)
+        write_to_file(target_path, username, salt, hashed_password)
 
 
-# while not result_queue.empty():
-#     username, salt, hashed_password = result_queue.get()
-#     write_to_file(target_path, username, salt, hashed_password)
+    # while not result_queue.empty():
+    #     username, salt, hashed_password = result_queue.get()
+    #     write_to_file(target_path, username, salt, hashed_password)
 
 
-# <<<<<<<<<<<<<<<<< DON'T CHANGE THE CODE BELOW HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>
+    # <<<<<<<<<<<<<<< DON'T CHANGE THE CODE BELOW HERE >>>>>>>>>>>>>>>>>>>>>>>>>
 
-print(f'Done in {time.time() - start_time:.2f}.')
-print(f'Hashed passwords saved to: {target_path}')
+    print(f'Done in {time.time() - start_time:.2f}.')
+    print(f'Hashed passwords saved to: {target_path}')

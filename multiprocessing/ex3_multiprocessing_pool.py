@@ -9,7 +9,6 @@ import pathlib
 import time
 
 from utils import hash_password, PASSWORDS
-start_time = time.time()  # Used to time the execution of this script
 
 
 # Define the hashed passwords file path, and create a blank file there
@@ -49,11 +48,15 @@ def save_hashed_password(username, password):
 #      3. Call map with save_hashed_password and PASSWORDS.items(). This works
 #         because .items returns (username, password) tuples.
 
-for username, password in PASSWORDS.items():
-    save_hashed_password(username, password)
+if __name__ == '__main__':
+
+    start_time = time.time()  # Used to time the execution of this script
+
+    for username, password in PASSWORDS.items():
+        save_hashed_password(username, password)
 
 
-# <<<<<<<<<<<<<<<<< DON'T CHANGE THE CODE BELOW HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>
+    # <<<<<<<<<<<<<<< DON'T CHANGE THE CODE BELOW HERE >>>>>>>>>>>>>>>>>>>>>>>>>
 
-print(f'Done in {time.time() - start_time:.2f}.')
-print(f'Hashed passwords saved to: {target_path}')
+    print(f'Done in {time.time() - start_time:.2f}.')
+    print(f'Hashed passwords saved to: {target_path}')
