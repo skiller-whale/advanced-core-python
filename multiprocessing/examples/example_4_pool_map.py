@@ -17,13 +17,14 @@ N_PROCESSES = 4
 
 start_time = time.time()
 
-with multiprocessing.Pool(processes=N_PROCESSES) as pool:
-    numbers = range(RANGE_START, RANGE_END)
-    result = pool.map(is_prime, numbers)
+if __name__ == '__main__':
+    with multiprocessing.Pool(processes=N_PROCESSES) as pool:
+        numbers = range(RANGE_START, RANGE_END)
+        result = pool.map(is_prime, numbers)
 
-primes = [number for number, is_a_prime in zip(numbers, result) if is_a_prime]
+    primes = [number for number, is_a_prime in zip(numbers, result) if is_a_prime]
 
 
-print(f"Done. Calculation took {time.time() - start_time:.2f}s")
-print("All primes found:")
-print(primes)
+    print(f"Done. Calculation took {time.time() - start_time:.2f}s")
+    print("All primes found:")
+    print(primes)
