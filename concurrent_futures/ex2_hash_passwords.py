@@ -1,5 +1,5 @@
 """
-The code below:
+The code in the hash_passwords function below:
 
 1. Iterates through a dictionary of {username: password} pairs (PASSWORDS).
 2. Calls the `hash_password` function for each password, which returns a
@@ -8,7 +8,8 @@ The code below:
 
 This uses a CPU-intensive algorithm to hash the passwords.
 
-Update the for loop in this code to use concurrent.futures with `submit`
+Update the hash_passwords function to use concurrent.futures with `submit` to
+parallelise the slow part of the process.
 
 You'll need to:
 
@@ -26,7 +27,6 @@ import pathlib
 import time
 
 from utils import hash_password, PASSWORDS  # a dict of { username : password }
-start_time = time.time()  # Used to time the execution of this script
 
 
 def write_to_file(path, username, salt, hashed_password):
@@ -35,20 +35,27 @@ def write_to_file(path, username, salt, hashed_password):
     with open(path, 'a') as file:
         file.write(f'{username}, {salt}, {hashed_password}\n')
 
-# Define the hashed passwords file path, and create a blank file there
-target_path = pathlib.Path(__file__).parent / 'hashed_passwords.txt'
-with open(target_path, 'w'):
-    pass
 
 # <<<<<<<<<<<<<<<<< DON'T CHANGE THE CODE ABOVE HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-for username, password in PASSWORDS.items():
-    hashed_password, salt = hash_password(password)
-    write_to_file(target_path, username, salt, hashed_password)
+def hash_passwords():
+    for username, password in PASSWORDS.items():
+        hashed_password, salt = hash_password(password)
+        write_to_file(target_path, username, salt, hashed_password)
 
 
 # <<<<<<<<<<<<<<<<< DON'T CHANGE THE CODE BELOW HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-print(f'Done in {time.time() - start_time:.2f}s.')
-print(f'Hashed passwords saved to: {target_path}')
+if __name__ == '__main__':
+    start_time = time.time()  # Used to time the execution of this script
+
+    # Define the hashed passwords file path, and create a blank file there
+    target_path = pathlib.Path(__file__).parent / 'hashed_passwords.txt'
+    with open(target_path, 'w'):
+        pass
+
+    hash_passwords()
+
+    print(f'Done in {time.time() - start_time:.2f}s.')
+    print(f'Hashed passwords saved to: {target_path}')
