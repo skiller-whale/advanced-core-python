@@ -15,7 +15,7 @@ The fifth is 2 + 3 = 5 => [1, 1, 2, 3, 5] and so on.
 You will implement the generator equivalent of this function,
 `fibonacci_numbers_generator`, to do the same thing, but with a generator.
 
-* Run this script, (`python3 <path>/generators.py`) so you can see what the
+* Run this script, (`python3 <path>/generator_functions.py`) so you can see what the
   `test_fibonacci` function does, and make sure you understand the output.
 
 * Uncomment the call to `test_fibonacci` at the bottom of this file, and update
