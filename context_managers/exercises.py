@@ -25,17 +25,6 @@ class TimingManager:
         pass
 
 
-### SOLUTION
-# class TimingManager:
-#     def __init__(self):
-#         pass
-
-#     def __enter__(self):
-#         self.time = time()
-
-#     def __exit__(self, exc_type, exc_value, exc_traceback):
-#         print(time() - self.time)
-
 
 def slow_function():
     print("Executing slow function")
@@ -49,9 +38,6 @@ def main():
     elapsed_time = end_time - start_time
     print(elapsed_time)
 
-    ### SOLUTION
-    # with TimingManager():
-    #     slow_function()
 
 
 
@@ -73,24 +59,6 @@ Otherwise, that error should be left unhandled.
 
 class TimingInterupt(Exception):
     pass
-
-### SOLUTION
-# class TimingManager:
-#     def __init__(self, recognised_exceptions=[]):
-#         self.recognised_exceptions = recognised_exceptions
-
-#     def __enter__(self):
-#         self.time = time()
-
-#     def __exit__(self, exc_type, exc_value, exc_traceback):
-#         if not exc_type:
-#             print(time() - self.time)
-
-#         if exc_type in self.recognised_exceptions:
-#             print(time() - self.time)
-#             print(exc_value)
-#             return True
-#         return False
 
 def main():
     raise_exception = True
@@ -133,23 +101,10 @@ class FileManager:
                 return True
             return False
 
-### SOLUTION
-# @contextmanager
-# def file_manager(file_path, mode):
-#     try:
-#         file_obj = open(file_path, mode=mode)
-#         yield file_obj
-#     except io.UnsupportedOperation:
-#         print("Trying to write to a read-only file.")
-#     except Exception as e:
-#         raise e
-
 
 def main():
     try_write = True
     with FileManager('./data/word_set_1.txt', 'r') as file:
-    ### SOLUTION
-    # with file_manager('./data/word_set_1.txt', 'r') as file:
         if try_write:
             file.write('test')
         else:
@@ -175,27 +130,10 @@ a total time of 0 seconds.
 3. Reverse the order of the context managers. What happens?
 """
 
-### SOLUTION
-# @contextmanager
-# def mock_time():
-#     global time
-#     saved_time = time
-#     time = lambda: 0
-#     yield
-#     time = saved_time
 
 def main():
     pass
-    # SOLUTION
-    # CORRECT
-    # with mock_time():
-    #     with TimingManager():
-    #         slow_function()
 
-    # REVERSED
-    # with TimingManager():
-    #     with mock_time():
-    #         slow_function()
 
 
 main()
@@ -224,12 +162,6 @@ txt_files = sorted(Path("data").rglob("*.txt"))
 
 streams = [open(fname, "r") for fname in txt_files]
 round_robin(streams)
-
-# SOLUTION
-# with ExitStack() as stack:
-    # streams = [stack.enter_context(open(fname, "r")) for fname in txt_files]
-    # round_robin(streams)
-
 
 ### CHECK THAT THE FILES HAVE BEEN CLOSED
 
