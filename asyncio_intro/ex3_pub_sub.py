@@ -20,14 +20,14 @@ In this exercise you will implement a pub-sub server loop using
     This coroutine will run indefinitely.
 
     Use `asyncio.gather` to run the following coroutines concurrently:
-        - do_receive(client_1, server)
-        - do_receive(client_2, server)
+        - receive_and_print_messages(client_1, server)
+        - receive_and_print_messages(client_2, server)
         - send_message(server)
 
 * Currently messages are not received by the clients because
-    do_receive is not implemented.
+    receive_and_print_messages is not implemented.
 
-    Implement the `do_receive` coroutine so that it calls 
+    Implement the `receive_and_print_messages` coroutine so that it calls 
     `server.receive_message` appropriately in a loop 
     and prints the following upon receiving a message:
 
@@ -42,8 +42,8 @@ HINT 2: You will need to filter the messages received. Check
     of system messages.
 """
 
-async def do_receive(client, server):
-    # TODO: Implement do_receive so that
+async def receive_and_print_messages(client, server):
+    # TODO: Implement `receive_and_print_messages` so that
     #    it continuously polls the PubSubServer and
     #    prints the messages client received.
     pass
