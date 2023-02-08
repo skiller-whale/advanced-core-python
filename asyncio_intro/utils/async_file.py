@@ -27,7 +27,7 @@ class AsyncFile():
 
     def _open_sync(self):
         time.sleep(0.1)
-        self.file = open(self.filename, 'r+')
+        self.file = open(self.filename, "r+")
 
     def _close_sync(self):
         time.sleep(0.1)
@@ -109,7 +109,7 @@ async def read_and_print_file_async(filename):
             num_lines = idx
             if not line:
                 break
-            print(f'Line {idx}: {line.strip()}')
+            print(f"Line {idx}: {line.strip()}")
     return num_lines
 
 def read_and_print_file_sync(filename):
@@ -122,14 +122,14 @@ def read_and_print_file_sync(filename):
         num_lines (int): The number of lines read
     """
     num_lines = 0
-    with open(filename, 'r+') as file:
+    with open(filename, "r+") as file:
         time.sleep(0.1)
         for idx, line in enumerate(file):
             time.sleep(0.1)
             num_lines = idx
             if not line:
                 break
-            print(f'Line {idx}: {line.strip()}')
+            print(f"Line {idx}: {line.strip()}")
 
         time.sleep(0.1)
 

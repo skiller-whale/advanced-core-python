@@ -1,52 +1,43 @@
 import asyncio
 import time
 from utils.async_file import read_and_print_file_async
-from ex1_coroutines import print_after_delay_async
+from example_data import USERS_FILE_PATH
 
 
 """
 USING GATHER TO RUN COROUTINES CONCURRENTLY
 -------------
 
-In the previous exercise the two coroutines `print_after_delay_async`
-    and `read_and_print_file_async` were executed synchronously.
+In this exercise you will use `asyncio.gather` to execute coroutines concurrently.
 
-This is because they were await-ed one after the other in async_main.
-In this exercise you will use `asyncio.gather` to execute them concurrently.
+* Implement `main_async` to use `asyncio.gather` and run the coroutines
+    `print_after_delay_async(0.5, f"Reading file {USERS_FILE_PATH.name}` and
+    `read_and_print_file_async(USERS_FILE_PATH)` concurrently.
 
-* This file imports `print_after_delay_async(delay, message)` from `ex1_coroutines`.
-    Make sure you have implemented this function to sleep for `delay`
-    and then print `message`.
+* Extract the number of lines read from `asyncio.gather` and print it.
 
-* Implement `async_main` to use `asyncio.gather` and run the coroutines
-    `print_after_delay_async(1.0, 'Reading file data/users.txt')` and
-    `read_and_print_file_async('data/users/txt')` concurrently.
-
-* `asyncio.gather` returns the results (the return values) of all
-    coroutines executed. This collection is ordered.
-
-    `read_and_print_file_async` returns the number of lines read from
-        the file. Extract this from the return value of
-        `asyncio.gather` and modify the print message to
-        include the number of lines read.
-
-* Was the message 'Reading file data/users.txt' printed before the file was read?
+* Was the message f"Reading file {USERS_FILE_PATH.name}" printed before the file was read?
 
 """
 
 
-async def async_main():
-    # TODO: Implement async_main to use `asyncio.gather`
+async def print_after_delay_async(delay, message):
+    await asyncio.sleep(delay)
+    print(message)
+
+
+async def main_async():
+    # TODO: Implement main_async to use `asyncio.gather`
     #   to run `print_after_delay_async` and 
     #   `read_and_print_file_async` concurrently
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_time = time.time()
 
-    asyncio.run(async_main())
+    asyncio.run(main_async())
 
     end_time = time.time()
-    print(f'Reading file took {(end_time - start_time):.3f} seconds.')
+    print(f"Reading file took {(end_time - start_time):.3f} seconds.")
 

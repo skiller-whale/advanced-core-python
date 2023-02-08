@@ -1,5 +1,5 @@
 import asyncio
-from utils.pub_sub import PubSubServer, PubSubClient, send_message
+from utils.pub_sub import PubSubServer, PubSubClient, read_stdin_and_send_messages
 
 """
 PUB-SUB SERVER/CLIENT
@@ -8,49 +8,45 @@ PUB-SUB SERVER/CLIENT
 In this exercise you will implement a pub-sub server loop using
     the provided PubSubServer and PubSubClient classes.
 
-* Create a `PubSubServer` in `main_async`.
+* Create a `PubSubServer` in `main_async` and two clients. Subscribe:
+    * Client 1 to `chat` and `general
+    * Client 2 to `chat`
 
-* Create two clients -- `client_1` and `client_2`.
-    * Subscribe client_1 to channels `chat` and `general` using
-        an appropriate method call on `server`.
-    * Subscribe client_2 to the channel `chat`.
+`read_stdin_and_send_messages(server: PubSubServerInterface)`
+    waits for user input (stdin) and sends messages to the server.
 
-* The coroutine `send_message(server: PubSubServerInterface)` waits for 
-    a message input from the terminal and sends it to the server.
-    This coroutine will run indefinitely.
+* Use `asyncio.gather` to run `read_stdin_and_send_messages`.
 
-    Use `asyncio.gather` to run the following coroutines concurrently:
-        - receive_and_print_messages(client_1, server)
-        - receive_and_print_messages(client_2, server)
-        - send_message(server)
-
-* Currently messages are not received by the clients because
-    receive_and_print_messages is not implemented.
-
-    Implement the `receive_and_print_messages` coroutine so that it calls 
+* Implement `receive_and_print_messages` so that it polls 
     `server.receive_message` appropriately in a loop 
     and prints the following upon receiving a message:
 
-    'Client <client_id> received message: <message>'.
+    "Client <client_id> received message: <message>".
 
-    You will need to call an appropriate method on client
-    to obtain the <client_id>.
+    You will need to call a method on each client to get <client_id>.
 
-HINT 1: You will need to use `asyncio.sleep` inside the loop.
+* Use `asyncio.gather` to run `receive_and_print_messages` for
+    both clients.
+
+HINT 1: You will need to use `asyncio.sleep(0)` inside the loop.
 HINT 2: You will need to filter the messages received. Check
     the documentation of server.receive_message for details
     of system messages.
 """
 
+
 async def receive_and_print_messages(client, server):
-    # TODO: Implement `receive_and_print_messages` so that
+    # TODO: Implement receive_and_print_messages so that
     #    it continuously polls the PubSubServer and
     #    prints the messages client received.
     pass
 
+
+
 async def main_async():
     # TODO: Implement pub-sub logic here.
-    server = ...
+    pass
+
 
 if __name__ == "__main__":
     try:

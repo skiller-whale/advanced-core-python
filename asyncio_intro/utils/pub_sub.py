@@ -71,6 +71,9 @@ class PubSubServerInterface(abc.ABC):
         Args:
             channel (str): The channel to publish a message to.
             message (str): The message.
+
+        Returns:
+            int: The number of clients the message was sent to.
         """
 
     @abc.abstractmethod
@@ -82,9 +85,8 @@ class PubSubServerInterface(abc.ABC):
             client (PubSubClientInterface): The client
 
         Returns:
-            str: The oldest unread message.
-                NOT_SUBSCRIBED if the client is not subscribed to any channels.
-                NO_MESSAGES if the client has no messages.
+            str: The oldest undread message. Returns an _empty string_ 
+                if there are no unread messages.
         """
 
     @abc.abstractmethod
@@ -94,6 +96,7 @@ class PubSubServerInterface(abc.ABC):
         Returns:
             set: Created channels.
         """
+
 
 class PubSubClient(PubSubClientInterface):
     client_ids = set()
@@ -109,6 +112,7 @@ class PubSubClient(PubSubClientInterface):
 
     def get_id(self):
         return self._id
+
 
 class PubSubServer(PubSubServerInterface):
     """A publish-subscribe Server implemented using asyncio.
@@ -137,17 +141,24 @@ class PubSubServer(PubSubServerInterface):
         if channel not in self._channels:
             return
 
+        sent = 0
         for client_id in self._channels[channel]:
             self._messages[client_id].append(message)
+            # this is incremented here as clients
+            #   can subscribe during the sending of
+            #   the message
+            sent += 1
             await asyncio.sleep(0)
+
+        return sent
 
     async def receive_message(self, client):
         client_id = client.get_id()
         if client_id not in self._messages:
-            return 'NOT_SUBSCRIBED'
+            return ""
 
         if len(self._messages[client_id]) == 0:
-            return 'NO_MESSAGES'
+            return ""
 
         await asyncio.sleep(0.05)
         last_message = self._messages[client_id].pop(0)
@@ -162,9 +173,9 @@ class PubSubServer(PubSubServerInterface):
             if client_id in self._messages:
                 del self._messages[client_id]
         return True
-        
 
-async def send_message(server: PubSubServerInterface):
+
+async def read_stdin_and_send_messages(server: PubSubServerInterface):
     """Send message to the specified PubSubServer.
 
     Args:
@@ -172,15 +183,15 @@ async def send_message(server: PubSubServerInterface):
             that implements PubSubServerInterface.
     """
     while True:
-        print('Type in your message [channel: message]!')
-        print('>>> ', end='', flush=True)
+        print("Type in your message [channel: message]!")
+        print(">>> ", end="", flush=True)
 
         reader = await get_stream_reader(sys.stdin)
         data = await reader.readline()
-        msg = data.decode().split(':')
+        msg = data.decode().split(":")
         if len(msg) < 2:
             channels = list(server.get_created_channels())
-            print(f'No channel specified, available channels: [{" | ".join(channels)}]')
+            print(f"No channel specified, available channels: [{' | '.join(channels)}]")
         else:
             await server.publish(msg[0], msg[1].strip())
 

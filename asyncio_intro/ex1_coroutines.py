@@ -1,48 +1,28 @@
 import asyncio
 import time
 from utils.async_file import read_and_print_file_sync, read_and_print_file_async
+from example_data import USERS_FILE_PATH
 
 """
 COROUTINES
 -------------
 
-Currently, this script uses only synchronous functions. Your task is to convert it so
-    that it uses coroutines (async functions).
-
-The module utils.async_file provides two functions for reading (and printing) a file
-    line-by-line. `read_and_print_file_sync` is synchronous and 
-    `read_and_print_file_async` -- asynchronous (a coroutine).
-    You do not need to understand the details of how they are implemented for this task.
-
-Both functions simulate reading a file with a delay when opening, reading individual
-    lines and closing -- this simulates a slow filesystem.
+Currently, this script uses synchronous functions to read a file line-by-line.
+Your task is to write asynchronous functions that do the same.
 
 * Run the script. How long does it take to run?
 
-* Create a coroutine (asynchronous function) called main_async that does nothing.
-    (You can use `pass` just like in a regular function).
+* Create a `main_async` coroutine and use `asyncio.run` to run it.
 
-* Modify the `if __name__ == '__main__'` block so that it uses
-    `asyncio.run` to run the `main_async` coroutine.
+* Inside `main_async` use the coroutine `read_and_print_file_async`
+    to read the file in USERS_FILE_PATH.
 
-    NOTE: Don't modify the runtime computation code (you'll need this later).
+* Print the number of lines read.
 
-* Inside `main_async`, use `read_and_print_file_async` to read
-    and print the file `data/users.txt` line by line.
-    `read_and_print_file_async` has the same signature as 
-    `read_and_print_file_sync` -- it takes one argument (the file name).
+* Create a function called `print_after_delay_async(delay, message)`, which
+    should be the async equivalent of `print_after_delay_sync`.
 
-* Similar to `main_sync`, store and print the number of lines read
-    at the end of `read_and_print_file_async` in `main_async`.
-
-* Create a function called `print_after_delay_async(delay, message)`.
-    This should behave like `print_after_delay_sync` without using
-    `time.sleep` and instead using an appropriate call to
-    a method from the `asyncio` module.
-
-* Execute the coroutine `print_after_delay_async` to print the message
-    'Reading file data/users.txt' after a 1 second delay at the
-    start of `main_async` (similarly to `main_sync`).
+* Use it to print `f"Reading file {USERS_FILE_PATH.name}"` after a 0.5 second delay.
 
 * How long does it take to run the async version of the script?
 """
@@ -58,24 +38,26 @@ def print_after_delay_sync(delay, message):
     time.sleep(delay)
     print(message)
 
+
 def main_sync():
     """Synchronous main function.
     """
-    print_after_delay_sync(1.0, 'Reading file data/users.txt')
-    lines_read = read_and_print_file_sync('data/users.txt')
-    print(f'Done, read {lines_read} lines!')
+    print_after_delay_sync(0.5, f"Reading file {USERS_FILE_PATH.name}")
+    lines_read = read_and_print_file_sync(USERS_FILE_PATH)
+    print(f"Done, read {lines_read} lines!")
 
-# TODO: Create and implement the coroutine async_main
+
+# TODO: Create and implement the coroutine main_async
 
 # TODO: Create and implement the coroutine print_after_delay_async
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # NOTE: Do not remove timing computation
     start_time = time.time()
 
-    ## TODO: Run async_main using asyncio.run instead
+    ## TODO: Run main_async using asyncio.run instead
     main_sync()
 
     end_time = time.time()
-    print(f'Reading file took {(end_time - start_time):.3f} seconds.')
+    print(f"Reading file took {(end_time - start_time):.3f} seconds.")
 
