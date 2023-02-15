@@ -14,7 +14,7 @@ HINT: A try block must have an except block too.
 """
 
 
-class CustomException(Exception):
+class CustomError(Exception):
     pass
 
 
@@ -28,7 +28,7 @@ def slow_crashing_function():
     """A slow function that takes a while to execute and then crashes.
     """
     a_long_list = [i ** 2 for i in range(int(1e6))]
-    raise CustomException()
+    raise CustomError()
 
 
 class TimingManager:
@@ -36,7 +36,7 @@ class TimingManager:
         self._start_time = time()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type is CustomException:
+        if exc_type is CustomError:
             end_time = time()
             elapsed_time = end_time - self._start_time
             print(f"Execution time was {elapsed_time}")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     with TimingManager():
         # this should not print anything
-        #   and propagate the CustomException
+        #   and propagate the CustomError
         slow_crashing_function()
 
     print("The block has exited")
