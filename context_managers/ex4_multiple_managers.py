@@ -30,7 +30,7 @@ def slow_function():
 
 
 @contextmanager
-def TimingManager():
+def timing_manager():
     start_time = time()
 
     yield
@@ -47,5 +47,5 @@ def mock_time():
 
 
 if __name__ == "__main__":
-    with TimingManager():
+    with timing_manager():
         slow_function()

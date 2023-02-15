@@ -42,5 +42,4 @@ if __name__ == "__main__":
     ### DO NOT EDIT BELOW
     ### CHECK THAT THE FILES HAVE BEEN CLOSED
     for file in files:
-        if not file.closed:
-            raise Exception("A file was left unclosed")
+        assert file.closed, "A file object was not closed!"
