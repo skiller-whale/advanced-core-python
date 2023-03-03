@@ -36,7 +36,7 @@ class TimingManager:
         self._start_time = time()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type is CustomError:
+        if exc_type is None:
             end_time = time()
             elapsed_time = end_time - self._start_time
             print(f"Execution time was {elapsed_time}")
