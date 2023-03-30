@@ -1,63 +1,101 @@
 import asyncio
 import json
 from pathlib import Path
-from utils import job_funcs
 
 DATA_PATH = Path(__file__).parent / 'data'
 
 # pylint: disable=pointless-string-statement
 """
-In this exercise you will implement a job management service that is
-    similar to a cronjob service on UNIX/Linux.
+This code calculates Euler's number and PI. Currently it is waiting
+    for both tasks before it stores the results in a file.
 
-Jobs are specified data/jobs.json as a python function name and a interval in seconds.
-{
-    "func": "print_date",
-    "interval": 2.5
-}
+This is not good behavior, as if something happens (computer crashes,
+    task gets cancelled, etc.), you lose what one function computed.
 
-Jobs themselves are defined as python function in `jobs` (imported above).
-
-Currently the `__main__` block parses the JSON file into a list of dicts.
-
-1. `main_async` is called with a list of jobs. For each job, schedule
-    `_run_job` using `create_task`. Make sure the first argument to `_run_job` is
-    a python function (the job) and not its name.
-
-2. Implement `_run_job` to run the job at the interval.
-
-HINT 1: You can use `getattr(jobs, job_name)` to access a python function by its string name.
-HINT 2: You can await tasks returned from `create_task`.
+1. Instead of using done() and result(), implement and use the new coroutine
+    `process_results(task, results, key)` so that it saves the results
+    in `results` and stores them to the file.
 """
 
-async def _run_job(job, interval):
-    """Runs `job` asynchronously at an `interval`.
+
+async def compute_pi(it):
+    """Compute pi using Madhava-Leibniz series.
 
     Args:
-        job (func): A function that takes no arguments.
-        interval (Numeric): Number of seconds between calls.
-    """
-    # YOUR CODE GOES HERE
-    ...
+        it (int): The number of iteration of the series.
 
-async def main_async(jobs):
-    # YOUR CODE GOES HERE
-    ...
+    Returns:
+        float: pi
+    """
+    pi, sign = 0.0, 1
+
+    for i in range(it):
+        pi += sign * 4.0 / (2 * i + 1)
+        sign *= -1
+
+        await asyncio.sleep(0)
+
+    return pi
+
+
+async def compute_e(it):
+    """Computes Euler's constant using the series:
+       1/0! + 1/1! + 1/2! + 1/3! + ...
+
+    Args:
+        it (int): The number of iterations.
+
+    Returns:
+        float: e
+    """
+    e, fact = 0, 1
+    for i in range(it):
+        if i > 0:
+            fact *= i
+        e += 1 / fact
+
+        await asyncio.sleep(0)
+    return e
+
+
+def store_results(results, file_path):
+    """Stores results as JSON in file_path.
+
+    Args:
+        results (dict): Any serializable dictionary.
+        file_path (str): Path to file.
+    """
+    print(f'Storing results in {file_path}.')
+    with open(file_path, 'w') as f:
+        f.write(json.dumps(results))
+
+
+async def process_results(task, results, key):
+    """Waits for and processes the results of a task
+
+    Args:
+        task (asyncio.Task): the task that produces the results.
+        results (dict): a reference to a dictionary to store the results of `task` in.
+        key (str): they key to `results` to use.
+    """
+    # TODO: implement
+    pass
+
+
+async def main_async():
+    e, pi = await asyncio.gather(
+        compute_e(it=10_000),
+        compute_pi(it=100_000)
+    )
+
+    results = {
+        'e': e,
+        'pi': pi
+    }
+
+    store_results(results, DATA_PATH / 'results.json')
+
 
 if __name__ == '__main__':
-    # Read jobs file and parse to a list of dicts
-    all_jobs = []
-
-    with open(DATA_PATH / 'jobs.json') as job_file:
-        try:
-            # Parse JSON file
-            contents = json.loads(job_file.read())
-
-            # JSON file should be a list of jobs
-            for job_definition in contents:
-                all_jobs.append(job_definition)
-        except Exception:
-            print(f'[error] Error parsing jobs file!')
-
-    # Call main_async to schedule all jobs
-    asyncio.run(main_async(all_jobs))
+    # Call main_async to schedule all tasks
+    asyncio.run(main_async())

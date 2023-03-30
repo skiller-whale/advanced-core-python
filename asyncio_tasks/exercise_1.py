@@ -6,8 +6,10 @@ DATA_PATH = Path(__file__).parent / 'data'
 
 # pylint: disable=pointless-string-statement
 """
-This code calculates Euler's number and PI. Currently it is waiting
+This code calculates Euler's number (e) and PI. Currently it is waiting
     for both tasks before it stores the results in a file.
+
+N.B.: You don't need to understand or edit the code that computes e or PI.
 
 This is not good behavior, as if something happens (computer crashes,
     task gets cancelled, etc.), you lose what one function computed.

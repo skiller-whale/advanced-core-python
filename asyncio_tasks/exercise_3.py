@@ -1,85 +1,87 @@
 import asyncio
+import json
 from pathlib import Path
-from utils.job_server_base import JobServerBase
 from utils import job_funcs
-import importlib
-import inspect
 
 DATA_PATH = Path(__file__).parent / 'data'
 
-# pylint: disable=pointless-string-statement, bare-except
+# pylint: disable=pointless-string-statement
 """
-In this exercise you will implement live reloading of job functions.
-    You will extend the JobServerBase class to do so.
+In this task you will implement code that runs tasks at regular intervals in the future.
 
-The JobServerBase class will watch for file changes to data/jobs.json
-    and call `cancel_all_running_jobs` followed by `create_job` for
-    each job in the file.
+Jobs are specified data/jobs.json as a python function name ("func")
+    and an "interval" in seconds (delay between calls):
+{
+    "func": "print_date",
+    "interval": 2.5
+}
 
-1. Create an instance attribute (a set) that stores a reference
-    to all running jobs (asyncio.Task).
+Jobs themselves are defined as python functions in `utils.job_funcs` (imported above).
 
-2. Implement the function `cancel_all_running_jobs` so that it
-    cancels all running jobs (asyncio.Task).
+Currently the `__main__` block parses the JSON file into a list of dicts that contain the job
+    function and interval:
+{
+    "func": <python function>,
+    "interval": <float>
+}
 
-3. Run the script and modify the duration of `print_date`.
-    What do you notice? Can you fix the problem?
+1. `main_async` is called with a list of jobs. For each job, schedule
+    `run_job` using `create_task`.
 
-4. Add a print statement that prints when a job is cancelled.
-    f"[info] Job {job.__name__} cancelled."
+2. Implement `run_job` to run the job at the interval.
 
-5. Start the script, then add a new job to `job_funcs.py`.
-    Make sure it's live-reloaded and running.
-
-HINT 1: You might want to override the `__init__` method to initalize
-    the set of all running `asyncio.Task`s.
-HINT 2: Is the try-except block in _run_job appropriate?
-HINT 3: You can use `func.__name__` to access a function's name.
-HINT 4: Use your imagination -- you can add any job to job_funcs.py!
-
-[OPTIONAL]
-7. Using `inspect.iscoroutinefunction(<function>)` you can check
-    whether a function is a coroutine.
-
-    Use it to enable the definition of `async` jobs in `jobs.py`.
-
-8. Make `print_unix_time` a coroutine and ensure it still works.
+HINT 1: You can await tasks returned from `create_task`.
+NOTE: This is similar to a cronjob service on UNIX/Linux.
 """
 
-class JobServer(JobServerBase):
-    @staticmethod
-    async def _run_job(job, interval):
-        while True:
-            try:
-                job()
-                await asyncio.sleep(interval)
-            except:
-                print(f'[error] Job {job.__name__} stopped due to an error!')
-                break
+def parse_jobs_file(filename, job_funcs_dfns):
+    """Parse a JSON file of jobs and return a list of dictionaries
+        {
+            'func': <python function>
+            'interval': int
+        }
 
-    def create_job(self, job_name, job_interval):
-        # reload the files in jobs
-        #   this lets you create jobs while the server is running
-        importlib.reload(job_funcs)
-        if not hasattr(job_funcs, job_name):
-            print(f'No such job {job_name}')
-            return
+    Args:
+        filename (str): JSON file of job definitions
+        job_funcs_dfns: A object that contains python functions.
+    """
+    # Read jobs file and parse to a list of dicts of
+    all_jobs = []
 
-        job_function = getattr(job_funcs, job_name)
+    with open(filename) as job_file:
+        try:
+            # Parse JSON file
+            contents = json.loads(job_file.read())
 
-        # YOUR CODE GOES HERE
-        asyncio.create_task(
-            self._run_job(
-                job_function,
-                job_interval
-            )
-        )
+            # JSON file should be a list of jobs
+            for job_definition in contents:
+                all_jobs.append({
+                    'func': getattr(job_funcs_dfns, job_definition['func']),
+                    'interval': float(job_definition['interval'])
+                })
+        except Exception:
+            print(f'[error] Error parsing jobs file!')
 
+    return all_jobs
+
+
+async def run_job(job, interval):
+    """Runs `job` asynchronously at an `interval`.
+
+    Args:
+        job (func): A function that takes no arguments.
+        interval (Numeric): Number of seconds between calls.
+    """
     # YOUR CODE GOES HERE
-    def cancel_all_running_jobs(self):
-        ...
+    pass
+
+
+async def main_async(jobs):
+    # YOUR CODE GOES HERE
+    pass
+
 
 if __name__ == '__main__':
-    server = JobServer(DATA_PATH / 'jobs.json')
-
-    asyncio.run(server.run())
+    all_jobs = parse_jobs_file(DATA_PATH / 'jobs.json', job_funcs)
+    # Call main_async to schedule all jobs
+    asyncio.run(main_async(all_jobs))
