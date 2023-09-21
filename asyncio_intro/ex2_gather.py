@@ -3,7 +3,7 @@ import time
 from utils.async_file import read_and_print_file_async
 from example_data import USERS_FILE_PATH
 
-
+# pylint: disable=pointless-string-statement
 """
 USING GATHER TO RUN COROUTINES CONCURRENTLY
 -------------

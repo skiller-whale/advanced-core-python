@@ -8,7 +8,7 @@ should print out a message of the form    TIMESTAMP | TAG | VALUE   for example:
 
    2020-08-22 15:47:34.520069 | MEMORY BLOCKS | 31566
 
-When you run this code, dome of the log lines printed will probably appear
+When you run this code, some of the log lines printed will probably appear
 garbled like this:
 
    2020-08-22 15:54:10.883183 | MEMORY BLOCKS |    2020-08-22 15:54:10.883221 | FREE DISK SPACE | 88342376 31565

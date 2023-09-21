@@ -3,6 +3,7 @@ import time
 from utils import format_big_int  # This function helps display large integers
 
 
+# pylint: disable=pointless-string-statement
 """
 The function `fibonacci_numbers_list` below returns a list of the first `n`
 Fibonacci numbers. This sequence starts with [1, 1] and then continues with
@@ -26,10 +27,13 @@ You will implement the generator equivalent of this function,
   functions (the sum of numbers produced should be the same).
 
 * If you're feeling patient (this may take a while) try updating `COUNT` to
-  `1_000_000` and run the script again.
+  `500_000` and run the script again.
 
-  (on a modern machine, the generator function might take around 20s, whilst
-  the list version could take well over 5 minutes).
+WARNING: If you have less than 16GB of RAM free, this might use all of your
+  available RAM and your computer might become unresponsive.
+
+  On a modern machine, the generator function might take around 6s, whilst
+  the list version could take well over a minute.
 """
 
 

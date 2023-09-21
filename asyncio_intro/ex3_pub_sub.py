@@ -1,6 +1,7 @@
 import asyncio
 from utils.pub_sub import PubSubServer, PubSubClient, read_stdin_and_send_messages
 
+# pylint: disable=pointless-string-statement
 """
 PUB-SUB SERVER/CLIENT
 -------------

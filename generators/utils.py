@@ -1,13 +1,12 @@
+from decimal import Decimal
+
 def format_big_int(value):
     """Return a standard form representation of a large integer
 
     This is needed because float types cannot handle values associated with
     big integer types
     """
-    string = str(value)
-    exponent = len(string) - 1
-    base = round(int(string[:5]), -2) / 10_000
-    return f"{base}e+{exponent}"
+    return f'{Decimal(value):.2e}'
 
 
 def format_size(n_bytes):
