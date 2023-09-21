@@ -35,6 +35,7 @@ def catch_errors(func):
 
 
 def send_ping():
+    # Do not make changes inside this function
     print("Sending ping to server...", end='\t', flush=True)
     response = ping()
     print("response code:", response)

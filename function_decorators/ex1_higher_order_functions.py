@@ -30,8 +30,11 @@ from utils import titlecase, remove_spaces, lowercase_first_letter
 
 
 def chain(function_1, function_2):
-    pass  # TODO: Write the body of this function, and update its return value
-    return function_1
+    # TODO: Write the body of this function. 
+    # You'll need to define and return a new function
+    def ...
+        
+    return ...
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

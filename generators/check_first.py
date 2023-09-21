@@ -34,3 +34,16 @@ print("The first twelve square numbers are:")
 for square in square_numbers:
     print(square, end=', ')
 print()
+
+
+"""
+Optional Extension:
+
+Write a function `check_first_n` which will do the same thing, but return a list
+of the first `n` items from a generator, along with a generator that returns
+all of the values:
+
+def check_first_n(generator, n):
+    ...
+    returns first_n_items, complete_generator
+"""
