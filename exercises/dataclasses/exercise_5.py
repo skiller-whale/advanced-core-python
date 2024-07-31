@@ -6,7 +6,11 @@ from html import HtmlNode, HtmlAttribute
 DATACLASSES: Exercise 5
 -----------------------
 
-1) Add the following top-level constant in `html.py`:
+1) Make `HtmlNode` frozen, then uncomment the line at the end
+    of this file.
+    * Can you explain why that does or doesn't work?
+
+2) Add the following top-level constant in `html.py`:
 
     ALLOWED_NODE_NAMES = [
         'html', 'head', 'title', 'body',
@@ -14,19 +18,14 @@ DATACLASSES: Exercise 5
         'h1', 'h2', 'h3', 'h4', 'h5'
     ] 
 
-2) Implement validation so that only tags in `ALLOWED_NODE_NAMES`
+3) Implement validation so that only tags in `ALLOWED_NODE_NAMES`
     are allowed for `HtmlNode` objects.
     * You should `raise` a `ValueError` with an appropriate message.
 
-3) Run this file and make sure the `whale` node isn't allowed.
+4) Run this file and make sure the neither `whale` nodes are allowed.
 
------------------------
-DATACLASSES: Exercise 6
------------------------
-
-1) Make `ALLOWED_NODE_NAMES` a class attribute.
-
-HINT: You may need to import some types from `dataclasses` (not `typing`).
+HINT: You may need to import some types and utility functions
+    from `dataclasses` and `typing`.
 """
 
 if __name__ == '__main__':
@@ -45,6 +44,9 @@ if __name__ == '__main__':
             HtmlNode('whale', 'Orca')
         ])
     ])
+
+    # [Part 1] uncomment this after making `HtmlNode` frozen
+    # html_tree.children.append(HtmlNode('whale', 'hello there'))
 
     print(html_tree.render())
     with open('output.html', 'w') as html_file:
