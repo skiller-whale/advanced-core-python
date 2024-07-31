@@ -1,4 +1,3 @@
-
 from html import HtmlNode, HtmlAttribute
 
 # pylint: disable=pointless-string-statement
