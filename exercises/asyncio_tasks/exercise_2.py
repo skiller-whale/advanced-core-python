@@ -1,61 +1,21 @@
 import asyncio
 import json
 from pathlib import Path
+from utils.compute_funcs import compute_e, compute_pi
 
 DATA_PATH = Path(__file__).parent / 'data'
 
 # pylint: disable=pointless-string-statement
 """
-This code calculates Euler's number and PI. Currently it is waiting
-    for both tasks before it stores the results in a file.
+Similar to exercise_1, this code calculates Euler's number and PI.
+Currently it is waiting for both tasks before it stores the results in a file.
 
 This is not good behavior, as if something happens (computer crashes,
     task gets cancelled, etc.), you lose what one function computed.
 
-1. Instead of using done() and result(), implement and use the new coroutine
-    `process_results(task, results, key)` so that it saves the results
+1. Implement and use the coroutine `process_results(task, results, key)` so that it saves the results
     in `results` and stores them to the file.
 """
-
-
-async def compute_pi(it):
-    """Compute pi using Madhava-Leibniz series.
-
-    Args:
-        it (int): The number of iteration of the series.
-
-    Returns:
-        float: pi
-    """
-    pi, sign = 0.0, 1
-
-    for i in range(it):
-        pi += sign * 4.0 / (2 * i + 1)
-        sign *= -1
-
-        await asyncio.sleep(0)
-
-    return pi
-
-
-async def compute_e(it):
-    """Computes Euler's constant using the series:
-       1/0! + 1/1! + 1/2! + 1/3! + ...
-
-    Args:
-        it (int): The number of iterations.
-
-    Returns:
-        float: e
-    """
-    e, fact = 0, 1
-    for i in range(it):
-        if i > 0:
-            fact *= i
-        e += 1 / fact
-
-        await asyncio.sleep(0)
-    return e
 
 
 def store_results(results, file_path):
@@ -84,7 +44,7 @@ async def process_results(task, results, key):
 
 async def main_async():
     e, pi = await asyncio.gather(
-        compute_e(it=10_000),
+        compute_e(it=50_000),
         compute_pi(it=100_000)
     )
 
