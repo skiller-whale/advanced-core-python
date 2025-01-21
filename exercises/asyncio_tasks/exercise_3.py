@@ -43,19 +43,15 @@ async def run_job(job, interval):
         interval (Numeric): Number of seconds between calls.
     """
     # YOUR CODE GOES HERE
-    while True:
-        job()
-        await asyncio.sleep(interval)
+    pass
 
 
 async def main_async(jobs):
     # YOUR CODE GOES HERE
     # Run each job in `jobs` using `run_job`.
-
     print(jobs)
-    for job in jobs:
-        task = asyncio.create_task(run_job(job['func'], job['interval']))
-    await task
+
+    pass
 
 
 if __name__ == '__main__':
