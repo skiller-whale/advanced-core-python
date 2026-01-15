@@ -16,6 +16,7 @@ def vowel_requested():
             print("Please enter the letter 'c' or 'v' and then press Enter")
 
 
+# pylint: disable=pointless-string-statement
 """ INSTRUCTIONS
 ----------------
 
