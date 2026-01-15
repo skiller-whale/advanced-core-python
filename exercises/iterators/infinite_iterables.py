@@ -1,6 +1,7 @@
 import time
 
 
+# pylint: disable=pointless-string-statement
 """ INSTRUCTIONS
 ----------------
 

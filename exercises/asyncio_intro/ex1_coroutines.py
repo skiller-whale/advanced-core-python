@@ -61,4 +61,3 @@ if __name__ == "__main__":
 
     end_time = time.time()
     print(f"Reading file took {(end_time - start_time):.3f} seconds.")
-
