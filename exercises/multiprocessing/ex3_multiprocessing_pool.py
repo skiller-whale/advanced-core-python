@@ -29,9 +29,13 @@ def save_hashed_password(username, password):
 #
 # Update this code to use a `multiprocessing.Pool`, with 4 processes
 #
-# You can either do this using apply_async or map
+# Use starmap (recommended) or apply_async
 #
 #   1. Create a multiprocessing.Pool with 4 workers.
+#
+#   IF you use starmap:
+#
+#      2. Call starmap with save_hashed_password and PASSWORDS.items().
 #
 #   IF you use apply_async:
 #
@@ -39,14 +43,6 @@ def save_hashed_password(username, password):
 #         combination, and keep track of the returned result
 #      3. Call .get() on each of the results to block the program until all
 #         processes have completed.
-#
-#   IF you use map:
-#
-#      2. Modify the save_hashed_password function so that it expects a tuple
-#         (username, password) instead of two separate arguments. This is needed
-#         because map only supports one iterable argument.
-#      3. Call map with save_hashed_password and PASSWORDS.items(). This works
-#         because .items returns (username, password) tuples.
 
 if __name__ == '__main__':
 
